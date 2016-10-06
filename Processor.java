@@ -66,12 +66,17 @@ public class Processor {
         //ts[0]="1.2.840.10008.5.1.4.1.1.2";
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.valueOf("PATIENT"));
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
-       dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
-        //dcmqr.addMatchingKey(Tag.toTagPath("PatientID"), "1230310K");
-        //dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
+        dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
+
+       // dcmqr.addMatchingKey(Tag.toTagPath("PatientID"), "1230310K");
+
+        //Altair - 8 estudos
+        dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
 
         //Roberto - 1 exame
-        dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "0430620A");
+        //dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "0430620A");
+
+        
         ///dcmqr.addMatchingKey(new int[]{Tag.StudyDate}, "20150904");
         //dcmqr.addMatchingKey(new int[]{Tag.StudyTime}, "152432.328000");
        //dcmqr.addMatchingKey(new int[]{Tag.SeriesInstanceUID},
@@ -100,8 +105,7 @@ public class Processor {
             //listTemp.add(serie);
             //dcmqr.move(listTemp);
             dcmqr.move(listP);
-            listTemp.clear();
-            //dcmqr.get(listP);
+            //listTemp.clear();
             System.out.println("queried");
 
             System.out.println("List Size = " + listP.size());
