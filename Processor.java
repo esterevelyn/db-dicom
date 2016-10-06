@@ -66,10 +66,11 @@ public class Processor {
         //ts[0]="1.2.840.10008.5.1.4.1.1.2";
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.valueOf("PATIENT"));
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
-       dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.SERIES);
+       dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
         //dcmqr.addMatchingKey(Tag.toTagPath("PatientID"), "1230310K");
         //dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
 
+        //Roberto - 1 exame
         dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "0430620A");
         ///dcmqr.addMatchingKey(new int[]{Tag.StudyDate}, "20150904");
         //dcmqr.addMatchingKey(new int[]{Tag.StudyTime}, "152432.328000");
