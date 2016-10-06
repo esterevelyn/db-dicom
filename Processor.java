@@ -35,7 +35,7 @@ public class Processor {
         List<DicomObject> listP = new ArrayList<>();
         List<DicomObject> listTemp = new ArrayList<>();
         String hc = "HCRP113547";
-
+        //
         DcmQR dcmqr =  new DcmQR(hc);
 
         //servidor
