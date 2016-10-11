@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ImageOfPatient {
 
-    public void getImageOfPatient () throws InterruptedException {
+    public void getImageOfPatient (List idPatients) throws InterruptedException {
         List<DicomObject> listP = new ArrayList<>();
         String hc = "HCRP113547";
         //
@@ -49,7 +49,8 @@ public class ImageOfPatient {
 
         // dcmqr.addMatchingKey(Tag.toTagPath("PatientID"), "1230310K");
 
-        //Altair - 8 estudos
+        //lista IDs pacientes
+
         dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
 
         //Roberto - 1 exame

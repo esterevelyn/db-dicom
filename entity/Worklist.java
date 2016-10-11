@@ -21,7 +21,7 @@ public class Worklist {
         this.date = date;
     }
 
-    public ArrayList<String> getWL(){
+    public List<String> getWL(){
         List listP = new ArrayList<>();
         String aet = "HCRP113547";
         DcmMWL wl = new DcmMWL(aet);
@@ -38,11 +38,6 @@ public class Worklist {
         wl.setTransferSyntax(new String[]{UID.ImplicitVRLittleEndian});
        wl.addMatchingKey(new int[]{Tag.Modality}, "CT");
         //wl.addReturnKey(new int[]{Tag.CTAcquisitionTypeSequence});
-
-
-
-
-
 
 
         try{
@@ -68,26 +63,25 @@ public class Worklist {
             e.printStackTrace();
         }
 
-        
 
-       // System.out.println(wl);
+        for(int i=0; i<listP.size(); i++) {
+            String regImg = listP.get(i).toString();
+            //System.out.println(imgF.getIdentifier());
+            //System.out.println(regImg);
+            String[] inf;
+            inf = regImg.split("\n");
+            //String patientID = inf[4].split(" ")[3];
+            // String patientNam = "";
+            String studyInsta = inf[4].split(" ")[3];
+            studyInsta=studyInsta.replace("[", "");
+            studyInsta=studyInsta.replace("]", "");
+            // String studyDate = inf[1].split(" ")[3];
+            // String studyTime = inf[2].split(" ")[3];
+            //String SOPInstanc = inf[0].split(" ")[3];
+            System.out.println(studyInsta);
+        }
 
-        /*dcmqr.setCalledAET("CQCT",true); //remoto CQCT
-        dcmqr.setRemoteHost("10.165.14.191"); // IP CQCT 10.165.14.191
-        dcmqr.setRemotePort(104); //104
-
-
-        //Local
-        dcmqr.setCalling("HCRP113547");
-        dcmqr.setLocalHost("143.107.141.242");
-        //dcmqr.setLocalHost("localhost");
-        dcmqr.setLocalPort(11104);
-
-        //dcmqr.setDateTimeMatching(true);
-        dcmqr.setCFind(true);
-        dcmqr.setCGet(true);
-        */
-        return null;
+        return listP;
 
     }
 }

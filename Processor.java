@@ -9,6 +9,8 @@ import processor.entity.Worklist;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
@@ -22,7 +24,8 @@ public class Processor {
 
         //pegar pacientes da worklist
         Worklist wl = new Worklist("20161012");
-        wl.getWL();
+        List idPatients= new ArrayList();
+        idPatients=wl.getWL();
 
         //pegar imagens dos pacientes da worklist
         //ImageOfPatient im = new ImageOfPatient();
