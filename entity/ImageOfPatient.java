@@ -46,12 +46,14 @@ public class ImageOfPatient {
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.valueOf("PATIENT"));
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
         dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
-
+        //String id = idPatients.get(0);
+        ImageOfPatient im = new ImageOfPatient();
+        //im.consultDB(idPatients.get(0), dcmqr);
         // dcmqr.addMatchingKey(Tag.toTagPath("PatientID"), "1230310K");
 
         //lista IDs pacientes
 
-        dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
+
 
         //Roberto - 1 exame
         //dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "0430620A");
@@ -61,7 +63,7 @@ public class ImageOfPatient {
         //dcmqr.addMatchingKey(new int[]{Tag.StudyTime}, "152432.328000");
         //dcmqr.addMatchingKey(new int[]{Tag.SeriesInstanceUID},
         //"1.2.840.113704.1.111.4052.1475161513.7");
-        dcmqr.configureTransferCapability(true);
+
 
         //dcmqr.addMatchingKey(Tag.toTagPath());
         //dcmqr.addMatchingKey(Tag.toTagPath("SOPClassUID"), "1.2.840.10008.5.1.4.1.1.2");
@@ -73,16 +75,19 @@ public class ImageOfPatient {
         //dcmqr.addReturnKey(new int[]{Tag.PatientID});
         //dcmqr.addReturnKey(new int[]{Tag.SOPInstanceUID});
         //dcmqr.addReturnKey(new int[]{Tag.StudyTime});
-
-
+    }
+        private void consultDB(String idPatient, DcmQR dcmqr) {
+         dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
+         dcmqr.configureTransferCapability(true);
+        List<DicomObject> listP = new ArrayList<>();
         try {
+
             dcmqr.start();
             System.out.println("started");
             dcmqr.open();
             System.out.println("opened");
             listP = dcmqr.query();
             dcmqr.move(listP);
-
             System.out.println("queried");
 
             System.out.println("List Size = " + listP.size());
@@ -96,9 +101,12 @@ public class ImageOfPatient {
             //System.exit(1);
         } catch (org.dcm4che2.net.ConfigurationException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         System.out.println("done");
         System.out.println("List Size = " + listP.size());
-    }
+        }
 }
+

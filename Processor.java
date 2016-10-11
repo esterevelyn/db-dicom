@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import processor.db.DataObjectRepository;
 import processor.entity.Header;
+import processor.entity.ImageOfPatient;
 import processor.entity.Report;
 import processor.entity.Worklist;
 
@@ -28,8 +29,8 @@ public class Processor {
         idPatients=wl.getWL();
 
         //pegar imagens dos pacientes da worklist
-        //ImageOfPatient im = new ImageOfPatient();
-        //im.getImageOfPatient();
+        ImageOfPatient im = new ImageOfPatient();
+        im.getImageOfPatient(idPatients);
 
         //ler cabeçalho das imagens e  salvar informações no banco
         Header header = new Header();
