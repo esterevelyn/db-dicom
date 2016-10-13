@@ -1,4 +1,4 @@
-package processor.entity;
+package processor;
 
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
@@ -13,10 +13,9 @@ import java.util.List;
  */
 public class ImageOfPatient {
 
-    public void getImageOfPatient (List idPatients) throws InterruptedException {
-        List<DicomObject> listP = new ArrayList<>();
+    public void getImageOfPatient(List<String> idPatients, String data) throws InterruptedException {
         String hc = "HCRP113547";
-        //
+        String path = "C:/images"+ " " + data + "new";
         DcmQR dcmqr = new DcmQR(hc);
 
         //servidor
@@ -27,59 +26,36 @@ public class ImageOfPatient {
         //Local
         dcmqr.setCalling("HCRP113547");
         dcmqr.setLocalHost("143.107.141.242");
-        //dcmqr.setLocalHost("localhost");
         dcmqr.setLocalPort(11104);
 
         //dcmqr.setDateTimeMatching(true);
         dcmqr.setCFind(true);
         dcmqr.setCGet(true);
 
-        //String[] ts= new String[]{"1.2.840.10008.1.2"};
-        dcmqr.setStoreDestination("C:/images");
+        dcmqr.setStoreDestination(path);
         dcmqr.setMoveDest("HCRP113547");
         //dcmqr.addStoreTransferCapability("1.2.840.10008.5.1.4.1.1.2",ts);
         //dcmqr.addStoreTransferCapability(UID.CTImageStorage,new String[]{UID.ImplicitVRLittleEndian});
-        dcmqr.addStoreTransferCapability(UID.SecondaryCaptureImageStorage, new String[]{UID.ImplicitVRLittleEndian});
+        dcmqr.addStoreTransferCapability(UID.SecondaryCaptureImageStorage,
+                new String[]{UID.ImplicitVRLittleEndian});
 
 
-        //ts[0]="1.2.840.10008.5.1.4.1.1.2";
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.valueOf("PATIENT"));
         //dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
         dcmqr.setQueryLevel(DcmQR.QueryRetrieveLevel.PATIENT);
         //String id = idPatients.get(0);
-        ImageOfPatient im = new ImageOfPatient();
-        //im.consultDB(idPatients.get(0), dcmqr);
-        // dcmqr.addMatchingKey(Tag.toTagPath("PatientID"), "1230310K");
 
-        //lista IDs pacientes
+        for (String idPatient : idPatients) {
+            consultDB(idPatient, dcmqr);
+        }
 
-
-
-        //Roberto - 1 exame
-        //dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "0430620A");
-
-
-        ///dcmqr.addMatchingKey(new int[]{Tag.StudyDate}, "20150904");
-        //dcmqr.addMatchingKey(new int[]{Tag.StudyTime}, "152432.328000");
-        //dcmqr.addMatchingKey(new int[]{Tag.SeriesInstanceUID},
-        //"1.2.840.113704.1.111.4052.1475161513.7");
-
-
-        //dcmqr.addMatchingKey(Tag.toTagPath());
-        //dcmqr.addMatchingKey(Tag.toTagPath("SOPClassUID"), "1.2.840.10008.5.1.4.1.1.2");
-
-
-        //
-
-
-        //dcmqr.addReturnKey(new int[]{Tag.PatientID});
-        //dcmqr.addReturnKey(new int[]{Tag.SOPInstanceUID});
-        //dcmqr.addReturnKey(new int[]{Tag.StudyTime});
     }
-        private void consultDB(String idPatient, DcmQR dcmqr) {
-         dcmqr.addMatchingKey(new int[]{Tag.PatientID}, "1330474K");
-         dcmqr.configureTransferCapability(true);
+    private void consultDB(String idPatient, DcmQR dcmqr) {
         List<DicomObject> listP = new ArrayList<>();
+        dcmqr.addMatchingKey(new int[]{Tag.PatientID}, idPatient);
+        //System.out.println(idPatient);
+        dcmqr.configureTransferCapability(true);
+
         try {
 
             dcmqr.start();
@@ -97,8 +73,7 @@ public class ImageOfPatient {
             dcmqr.close();
 
         } catch (java.io.IOException e) {
-            //System.out.println(e);
-            //System.exit(1);
+            e.printStackTrace();
         } catch (org.dcm4che2.net.ConfigurationException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -107,6 +82,7 @@ public class ImageOfPatient {
 
         System.out.println("done");
         System.out.println("List Size = " + listP.size());
-        }
+        //}
+    }
 }
 

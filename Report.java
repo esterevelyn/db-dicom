@@ -1,4 +1,4 @@
-package processor.entity;
+package processor;
 
 /**
  * Created by EsterIBm on 11/10/2016.
