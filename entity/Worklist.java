@@ -8,6 +8,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by EsterIBm on 11/10/2016.
@@ -80,8 +81,12 @@ public class Worklist {
             //String SOPInstanc = inf[0].split(" ")[3];
             System.out.println(studyInsta);
         }
+        List<String> idPatients = new ArrayList<>(listP.size());
+        for (Object object : listP) {
+            idPatients.add(Objects.toString(object, null));
+        }
 
-        return listP;
+        return idPatients;
 
     }
 }
