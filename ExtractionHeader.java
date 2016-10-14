@@ -65,8 +65,6 @@ public class ExtractionHeader {
             Iterator<DicomElement> iter = dObject.datasetIterator();
             Patient patient = new Patient();
             Study study = new Study();
-            patients.add(patient);
-            studies.add(study);
             while (iter.hasNext()) {
                 DicomElement element = iter.next();
                 int tag = element.tag();
@@ -138,24 +136,22 @@ public class ExtractionHeader {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
             }
             if (study.getDlp() != null) {
-
+                patients.add(patient);
+                studies.add(study);
             }
         }
-
-
 
         //verify(studies);
 
 
         System.out.println(patients.size());
         System.out.println(studies.size());
+        repositoryP.deleteAll();
+        repositoryS.deleteAll();
 
-        //patients.add(patient);
-        // repositoryP.save(patients.get(2));
         for (Study data : studies) {
             repositoryS.save(data);
         }
