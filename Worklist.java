@@ -111,7 +111,7 @@ public class Worklist {
 
     private void salveTXT (List<String> idPatients) throws IOException {
 
-        FileWriter arq = new FileWriter("C:\\Users\\EsterIBm\\Documents\\ID Patient no.txt");
+        FileWriter arq = new FileWriter("C:\\Users\\EsterIBm\\Documents\\ID Patient HOJE.txt");
         PrintWriter gravarArq = new PrintWriter(arq);
 
         for (String object : idPatients) {

@@ -47,7 +47,7 @@ public class ExtractionHeader {
                     dis.close();
                 }
             }
-            System.out.println(dicomObjectList.size());
+            //System.out.println(dicomObjectList.size());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.exit(0);
@@ -77,58 +77,49 @@ public class ExtractionHeader {
                         tagValue = dObject.getString(tag);
                         switch (tagAddr) {
                             case "(0010,0010)":
-                                System.out.println(tagName + " = " + tagValue);
-                                //object.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 patient.setNamePatient(tagValue);
                                 break;
                             case "(0010,0020)":
-                                System.out.println(tagName + " = " + tagValue);
-                                //object.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 patient.setIdPatient(tagValue);
                                 break;
                             case "(0010,0040)":
-                                System.out.println(tagName + " = " + tagValue);
-                                //object.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 patient.setSexPatient(tagValue);
                                 break;
                             case "(0010,0030)":
-                                System.out.println(tagName + " = " + tagValue);
-                                //object.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 patient.setBirthDatePatient(tagValue);
                                 break;
                             case "(0018,1030)":
-                                System.out.println(tagName + " = " + tagValue);
-                                //patient.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 study.setProtocolName(tagValue);
                                 break;
                             case "(0008,1030)":
-                                System.out.println(tagName + " = " + tagValue);
-                                // patient.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 study.setStudyDescription(tagValue);
                                 break;
                             case "(0008,0020)":
-                                System.out.println(tagName + " = " + tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 study.setStudyDate(tagValue);
                                 break;
                             case "(0008,0030)":
-                                System.out.println(tagName + " = " + tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 study.setStudyTime(tagValue);
                                 break;
                             case "(0018,0060)":
-                                System.out.println(tagName + " = " + tagValue);
-                                //patient.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 study.setKvp(tagValue);
                                 break;
                             case "(0020,000D)": //Study Instance UID
-                                System.out.println(tagName + " = " + tagValue);
-                                //patient.insertData(tagName, tagValue);
+                                //System.out.println(tagName + " = " + tagValue);
                                 study.setIdStudy(tagValue);
                                 break;
                             case "(00E1,1021)":
-                                System.out.println("DLP" + " = " + tagValue);
-                                //patient.insertData("DLP", tagValue);
+                                //System.out.println("DLP" + " = " + tagValue);
                                 study.setDlp(tagValue);
-                                System.out.println(study.getDlp());
+                                //System.out.println(study.getDlp());
                             default:
                                 break;
                         }
@@ -147,11 +138,13 @@ public class ExtractionHeader {
         //verify(studies);
 
 
-        System.out.println(patients.size());
-        System.out.println(studies.size());
-        repositoryP.deleteAll();
-        repositoryS.deleteAll();
+        //System.out.println(patients.size());
+       // System.out.println(studies.size());
 
+        //repositoryP.deleteAll();
+        //repositoryS.deleteAll();
+
+        // salvando objeto no banco
         for (Study data : studies) {
             repositoryS.save(data);
         }

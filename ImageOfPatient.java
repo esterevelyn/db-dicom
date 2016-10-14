@@ -12,11 +12,12 @@ import java.util.List;
  * Created by EsterIBm on 11/10/2016.
  */
 public class ImageOfPatient {
+    String hc = "HCRP113547";
+    DcmQR dcmqr = new DcmQR(hc);
 
-    public void getImageOfPatient(List<String> idPatients, String data) throws InterruptedException {
-        String hc = "HCRP113547";
-        String path = "C:/images"+ " " + data + "new";
-        DcmQR dcmqr = new DcmQR(hc);
+    public void getImageOfPatient(List<String> idPatients, String date) throws InterruptedException {
+
+        String path = "C:/images"+ " " + date;
 
         //servidor
         dcmqr.setCalledAET("CQCT", true); //remoto CQCT
@@ -46,11 +47,11 @@ public class ImageOfPatient {
         //String id = idPatients.get(0);
 
         for (String idPatient : idPatients) {
-            consultDB(idPatient, dcmqr);
+            consultDB(idPatient);
         }
 
     }
-    private void consultDB(String idPatient, DcmQR dcmqr) {
+    private void consultDB(String idPatient) {
         List<DicomObject> listP = new ArrayList<>();
         dcmqr.addMatchingKey(new int[]{Tag.PatientID}, idPatient);
         //System.out.println(idPatient);
