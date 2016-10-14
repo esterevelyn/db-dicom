@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
- * Classe padr„o do SpringBoot
+ * Classe padr√£o do SpringBoot
  */
 @SpringBootApplication
 @EnableMongoRepositories

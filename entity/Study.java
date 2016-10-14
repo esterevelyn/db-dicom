@@ -50,6 +50,36 @@ public class Study {
     public void setDlp(String dlp) {
         this.dlp = dlp;
     }
+
+    public String getIdStudy() {
+        return idStudy;
+    }
+
+    public String getStudyDate() {
+        return studyDate;
+    }
+
+    public String getStudyTime() {
+        return studyTime;
+    }
+
+    public String getStudyDescription() {
+        return studyDescription;
+    }
+
+    public String getProtocolName() {
+        return protocolName;
+    }
+
+    public String getKvp() {
+        return kvp;
+    }
+
+    public String getDlp() {
+        return dlp;
+    }
+
+
 }
 
 

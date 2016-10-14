@@ -11,6 +11,7 @@ import processor.db.StudyRepository;
 import processor.entity.Patient;
 import processor.entity.Study;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,48 +20,53 @@ import java.util.List;
 /**
  * Created by EsterIBm on 11/10/2016.
  */
-@Component
-public class Header {
-    @Autowired
-    private PatientRepository repositoryP;
-    private StudyRepository repositoryS;
 
+@Component
+public class ExtractionHeader {
+
+    @Autowired private PatientRepository repositoryP;
+    @Autowired private StudyRepository repositoryS;
+
+    @PostConstruct
     public void listHeader() {
-        List<DicomObject> listFilesDicom = new ArrayList<>();
-        DicomObject dObject = null;
+        List<DicomObject> dicomObjectList = new ArrayList<>();
+        DicomObject dObjec = null;
 
         try {
            /* DicomInputStream dis = new DicomInputStream
                     (              new File("C:\\Users\\EsterIBm\\Documents\\Dicom\\DICOM\\S00001\\SER00001\\I00003"));*/
-            File file = new File("C:/images");
+            File file = new File("C:/images 20161014");
             File[] files = file.listFiles();
             files = file.listFiles();
             //lendo todos os arquivos da pasta
             for (int i = 0; i < files.length; i++) {
                 DicomInputStream dis = new DicomInputStream(files[i]);
-                dObject = dis.readDicomObject();
-                listFilesDicom.add(dObject);
+                dObjec = dis.readDicomObject();
+                dicomObjectList.add(dObjec);
                 if (i == (files.length - 1)) {
                     dis.close();
                 }
             }
-            boolean delete = deleteDir(file);
-            System.out.println(delete);
+            System.out.println(dicomObjectList.size());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
 
-        //getHeader(listFilesDicom);
+        getHeader(dicomObjectList);
     }
 
+
     public void getHeader(List<DicomObject> dicomObjectList) {
-        //List<Patient> patients = new ArrayList<>();
+
+        List<Patient> patients = new ArrayList<>();
+        List<Study> studies = new ArrayList<>();
         for (DicomObject dObject : dicomObjectList) {
             Iterator<DicomElement> iter = dObject.datasetIterator();
             Patient patient = new Patient();
             Study study = new Study();
-
+            patients.add(patient);
+            studies.add(study);
             while (iter.hasNext()) {
                 DicomElement element = iter.next();
                 int tag = element.tag();
@@ -71,7 +77,6 @@ public class Header {
                     String tagVR = dObject.vrOf(tag).toString();
                     if (!(tagVR.equals("SQ"))) {
                         tagValue = dObject.getString(tag);
-
                         switch (tagAddr) {
                             case "(0010,0010)":
                                 System.out.println(tagName + " = " + tagValue);
@@ -79,22 +84,11 @@ public class Header {
                                 patient.setNamePatient(tagValue);
                                 break;
                             case "(0010,0020)":
-
                                 System.out.println(tagName + " = " + tagValue);
                                 //object.insertData(tagName, tagValue);
                                 patient.setIdPatient(tagValue);
                                 break;
-                            case "(0008,0020)":
-                                System.out.println(tagName + " = " + tagValue);
-                                study.setStudyDate(tagValue);
-
-                                break;
-                            case "(0008,0030)":
-                                System.out.println(tagName + " = " + tagValue);
-                                study.setStudyTime(tagValue);
-                                break;
                             case "(0010,0040)":
-
                                 System.out.println(tagName + " = " + tagValue);
                                 //object.insertData(tagName, tagValue);
                                 patient.setSexPatient(tagValue);
@@ -106,29 +100,37 @@ public class Header {
                                 break;
                             case "(0018,1030)":
                                 System.out.println(tagName + " = " + tagValue);
-                                patient.insertData(tagName, tagValue);
+                                //patient.insertData(tagName, tagValue);
+                                study.setProtocolName(tagValue);
                                 break;
                             case "(0008,1030)":
                                 System.out.println(tagName + " = " + tagValue);
-                                patient.insertData(tagName, tagValue);
+                                // patient.insertData(tagName, tagValue);
+                                study.setStudyDescription(tagValue);
                                 break;
-                            case "(0020,0010)":
+                            case "(0008,0020)":
                                 System.out.println(tagName + " = " + tagValue);
-                                patient.insertData(tagName, tagValue);
+                                study.setStudyDate(tagValue);
                                 break;
-                            case "(0010,1010)":
+                            case "(0008,0030)":
                                 System.out.println(tagName + " = " + tagValue);
-                                //object.insertData(tagName, tagValue);
-                                patient.setAgePatient(tagValue);
+                                study.setStudyTime(tagValue);
                                 break;
-                            case "(0020,000D)":
+                            case "(0018,0060)":
                                 System.out.println(tagName + " = " + tagValue);
-                                patient.insertData(tagName, tagValue);
+                                //patient.insertData(tagName, tagValue);
+                                study.setKvp(tagValue);
+                                break;
+                            case "(0020,000D)": //Study Instance UID
+                                System.out.println(tagName + " = " + tagValue);
+                                //patient.insertData(tagName, tagValue);
+                                study.setIdStudy(tagValue);
                                 break;
                             case "(00E1,1021)":
                                 System.out.println("DLP" + " = " + tagValue);
                                 //patient.insertData("DLP", tagValue);
                                 study.setDlp(tagValue);
+                                System.out.println(study.getDlp());
                             default:
                                 break;
                         }
@@ -139,18 +141,33 @@ public class Header {
 
                 }
             }
+            if (study.getDlp() != null) {
+
+            }
         }
+
+
+
+        //verify(studies);
+
+
+        System.out.println(patients.size());
+        System.out.println(studies.size());
+
         //patients.add(patient);
-
-      /* for (Patient data : patients) {
-            repository.save(data);
+        // repositoryP.save(patients.get(2));
+        for (Study data : studies) {
+            repositoryS.save(data);
         }
-    //System.out.println(repository.findByIdPatient(""));
-    //for (DataObject customer : repository.findAll()) {
-           System.out.println(repository.findByIdPatient("1230310K"));
-    // }*/
-    }
 
+        for (Patient data : patients) {
+            repositoryP.save(data);
+        }
+        //System.out.println(repository.findByIdPatient(""));
+        //for (DataObject customer : repository.findAll()) {
+        // System.out.println(repositoryP.findByIdPatient("1230310K"));
+        // }*/
+    }
     private static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
@@ -164,5 +181,14 @@ public class Header {
 
         // Agora o diretório está vazio, restando apenas deletá-lo.
         return dir.delete();
+    }
+
+    private void verify(List<Study> studies) {
+        for (Study s : studies) {
+            // if (s.getDlp().equals(null)) {
+            studies.remove(s);
+            //}
+        }
+
     }
 }

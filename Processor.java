@@ -1,29 +1,18 @@
 package processor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import processor.db.DataObjectRepository;
-
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Component
 public class Processor {
 
-    @Autowired
-    private DataObjectRepository repository;
-
-    @PostConstruct
-    public void init() throws IOException, InterruptedException {
+    public void init() {
 
         //pegar pacientes da worklist
-        String date = "20161015";
+        /*String date = "20161015";
         Worklist wl = new Worklist(date);
         List<String> idPatients = new ArrayList<>();
-       idPatients=wl.getWL();
+        idPatients=wl.getWL();*/
 
         //System.out.println(idPatients.size());
 
@@ -32,11 +21,11 @@ public class Processor {
        // im.getImageOfPatient(idPatients, date);
 
         //ler cabeçalho das imagens e  salvar informações no banco
-        Header header = new Header();
-        header.listHeader();
-
-        //gerar relatório
-        Report report = new Report();
-
+        ExtractionHeader eHeader = new ExtractionHeader();
+        eHeader.listHeader();
     }
+
 }
+
+   // }
+//}
