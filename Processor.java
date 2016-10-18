@@ -1,14 +1,18 @@
 package processor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.*;
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 
 
 @Component
 public class Processor {
+    @Autowired
+    private ExtractionHeader eHeader;
+
     @PostConstruct
     public void init() throws IOException, InterruptedException {
 
@@ -20,12 +24,11 @@ public class Processor {
         //System.out.println(idPatients.size());
 
         //pegar imagens dos pacientes da worklist
-        ImageOfPatient im = new ImageOfPatient();
-        im.getImageOfPatient(idPatients, date);
+        //ImageOfPatient im = new ImageOfPatient();
+        //im.getImageOfPatient(idPatients, date);
 
         //ler cabeçalho das imagens e  salvar informações no banco
-        ExtractionHeader eHeader = new ExtractionHeader();
-       // eHeader.listHeader();
+        eHeader.listHeader();
     }
 
 }

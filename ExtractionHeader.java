@@ -152,6 +152,7 @@ public class ExtractionHeader {
         for (Patient data : patients) {
             repositoryP.save(data);
         }
+
         //System.out.println(repository.findByIdPatient(""));
         //for (DataObject customer : repository.findAll()) {
         // System.out.println(repositoryP.findByIdPatient("1230310K"));
