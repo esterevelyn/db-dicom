@@ -59,7 +59,7 @@ public class ExtractionHeader {
 
         Set<Patient> patients = new HashSet<>();
         Set<Study> studies = new HashSet<>();
-        Map<String, String> data = new HashMap<>();
+        HashMap<String, String> data = new HashMap<>();
         String key = null;
         String value = null;
         Set<Map> mapES = new HashSet<>();
@@ -158,8 +158,12 @@ public class ExtractionHeader {
 
         }
 
-       System.out.println(mapES.size());
-        System.out.println(data);
+       //System.out.println(data.size());
+        //System.out.println(data);
+
+        for(Map map: mapES){
+            System.out.println(map);
+            }
         //System.out.println(studies.size());
 
         /*for (Patient patient : patients) {
@@ -167,7 +171,7 @@ public class ExtractionHeader {
         }*/
         // salvando objeto no banco
 
-        for (Patient patient : patients) {
+        /*for (Patient patient : patients) {
             for (Study study : studies){
                 for(Map map: mapES){
                     if(map.containsKey(patient.getIdPatient())== map.containsValue(study.getIdStudy())){
@@ -175,7 +179,7 @@ public class ExtractionHeader {
                     }
                 }
             }
-        }
+        }*/
     }
     //verify(studies);
 
