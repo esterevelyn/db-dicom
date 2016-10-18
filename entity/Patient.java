@@ -14,9 +14,6 @@ public class Patient {
     public String sexPatient;
 
 
-    //public List<String> DLP = new ArrayList<>();
-
-    //@Override
     @Override
     public String toString() {
         return String.format(
@@ -25,23 +22,6 @@ public class Patient {
                 "Patient[Patient ID= %s,Patient’s Name= %s, Patient’s Sex= %s, Patient’s Birth Date= %s ]",
                 idPatient, namePatient, sexPatient, birthDatePatient);
     }
-
-
-    /*Map<String, String> study = new HashMap<>();
-
-    public void insertData(String key, String value) {
-        // Se for uma chave ainda inexistente
-        // if (data.get(key) == null) {
-        study.put(key, value);
-
-
-        // } else { // Se j� existir chave, adiciona na lista j� existente
-        // data.get(key).add(value);
-        //   }
-
-
-    }*/
-
 
 
     public void setIdPatient(String idPatient) {

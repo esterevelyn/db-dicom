@@ -61,6 +61,7 @@ public class ExtractionHeader {
 
         List<Patient> patients = new ArrayList<>();
         List<Study> studies = new ArrayList<>();
+        String anterior = null;
         for (DicomObject dObject : dicomObjectList) {
             Iterator<DicomElement> iter = dObject.datasetIterator();
             Patient patient = new Patient();
@@ -115,6 +116,15 @@ public class ExtractionHeader {
                             case "(0020,000D)": //Study Instance UID
                                 //System.out.println(tagName + " = " + tagValue);
                                 study.setIdStudy(tagValue);
+                                /*if(anterior==null){
+                                    anterior= tagValue;
+                                }
+                                if(anterior != tagValue){
+                                   Study study1= studies.get();
+                                    if (study1.getDlp()==null){
+                                        study1.setDlp("NA");
+                                    }
+                                }*/
                                 break;
                             case "(00E1,1021)":
                                 //System.out.println("DLP" + " = " + tagValue);
@@ -135,29 +145,38 @@ public class ExtractionHeader {
             }
         }
 
-        //verify(studies);
-
-
-        //System.out.println(patients.size());
-       // System.out.println(studies.size());
-
-        //repositoryP.deleteAll();
-        //repositoryS.deleteAll();
-
         // salvando objeto no banco
-        for (Study data : studies) {
-            repositoryS.save(data);
-        }
+    }
+    //verify(studies);
+
+
+    //System.out.println(patients.size());
+    // System.out.println(studies.size());
+
+    //repositoryP.deleteAll();
+    //repositoryS.deleteAll();
+
+    private void savePatientsDD(List<Patient> patients) {
 
         for (Patient data : patients) {
             repositoryP.save(data);
         }
-
-        //System.out.println(repository.findByIdPatient(""));
-        //for (DataObject customer : repository.findAll()) {
-        // System.out.println(repositoryP.findByIdPatient("1230310K"));
-        // }*/
     }
+
+    private void saveStudiesDD(List<Study> studies) {
+        
+        for (Study data : studies) {
+            repositoryS.save(data);
+        }
+    }
+
+
+
+
+    //System.out.println(repository.findByIdPatient(""));
+    //for (DataObject customer : repository.findAll()) {
+    // System.out.println(repositoryP.findByIdPatient("1230310K"));
+    // }*/
     private static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();

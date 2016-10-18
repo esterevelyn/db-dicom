@@ -1,5 +1,7 @@
 package processor.entity;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 /**
  * Created by EsterIBm on 11/10/2016.
  */
@@ -13,6 +15,8 @@ public class Study {
     public String protocolName;
     public String kvp;
     public String dlp;
+    @DBRef
+    Patient patient;
 
     @Override
     public String toString() {
@@ -79,7 +83,13 @@ public class Study {
         return dlp;
     }
 
+    public Patient getPatient() {
+        return patient;
+    }
 
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 }
 
 
