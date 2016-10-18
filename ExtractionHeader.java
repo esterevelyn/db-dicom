@@ -13,9 +13,7 @@ import processor.entity.Study;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by EsterIBm on 11/10/2016.
@@ -59,8 +57,12 @@ public class ExtractionHeader {
 
     public void getHeader(List<DicomObject> dicomObjectList) {
 
-        List<Patient> patients = new ArrayList<>();
-        List<Study> studies = new ArrayList<>();
+        Set<Patient> patients = new HashSet<>();
+        Set<Study> studies = new HashSet<>();
+        Map<String, String> data = new HashMap<>();
+        String key = null;
+        String value = null;
+        Set<Map> mapES = new HashSet<>();
         String anterior = null;
         for (DicomObject dObject : dicomObjectList) {
             Iterator<DicomElement> iter = dObject.datasetIterator();
@@ -84,6 +86,7 @@ public class ExtractionHeader {
                             case "(0010,0020)":
                                 //System.out.println(tagName + " = " + tagValue);
                                 patient.setIdPatient(tagValue);
+                                key = tagValue;
                                 break;
                             case "(0010,0040)":
                                 //System.out.println(tagName + " = " + tagValue);
@@ -116,6 +119,7 @@ public class ExtractionHeader {
                             case "(0020,000D)": //Study Instance UID
                                 //System.out.println(tagName + " = " + tagValue);
                                 study.setIdStudy(tagValue);
+                                value=tagValue;
                                 /*if(anterior==null){
                                     anterior= tagValue;
                                 }
@@ -140,33 +144,60 @@ public class ExtractionHeader {
                 }
             }
             if (study.getDlp() != null) {
-                patients.add(patient);
+                //if(!patients.contains(patient)) {
+                    patients.add(patient);
+                //System.out.println(patient);
+
+               // }
                 studies.add(study);
+                data.put(key, value);
+                mapES.add(data);
+
             }
+
+
         }
 
+       System.out.println(mapES.size());
+        System.out.println(data);
+        //System.out.println(studies.size());
+
+        /*for (Patient patient : patients) {
+            System.out.println(patient);
+        }*/
         // salvando objeto no banco
+
+        for (Patient patient : patients) {
+            for (Study study : studies){
+                for(Map map: mapES){
+                    if(map.containsKey(patient.getIdPatient())== map.containsValue(study.getIdStudy())){
+                        study.setPatient(patient);
+                    }
+                }
+            }
+        }
     }
     //verify(studies);
 
-
-    //System.out.println(patients.size());
-    // System.out.println(studies.size());
 
     //repositoryP.deleteAll();
     //repositoryS.deleteAll();
 
     private void savePatientsDD(List<Patient> patients) {
 
-        for (Patient data : patients) {
-            repositoryP.save(data);
+        for (Patient patient : patients) {
+            repositoryP.save(patient);
         }
+
+
+
+
     }
 
     private void saveStudiesDD(List<Study> studies) {
-        
-        for (Study data : studies) {
-            repositoryS.save(data);
+
+        for (Study study : studies) {
+            repositoryS.save(study);
         }
     }
 

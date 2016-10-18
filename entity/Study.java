@@ -90,6 +90,22 @@ public class Study {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Study study = (Study) o;
+
+        return idStudy != null ? idStudy.equals(study.idStudy) : study.idStudy == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return idStudy != null ? idStudy.hashCode() : 0;
+    }
 }
 
 

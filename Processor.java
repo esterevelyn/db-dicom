@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.List;
 
 
 @Component
@@ -19,7 +18,7 @@ public class Processor {
         //pegar pacientes da worklist
         String date = "20161015";
         Worklist wl = new Worklist(date);
-        List<String> idPatients=wl.getWL();
+        //List<String> idPatients=wl.getWL();
 
         //System.out.println(idPatients.size());
 

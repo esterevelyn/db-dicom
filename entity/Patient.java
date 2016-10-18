@@ -56,4 +56,19 @@ public class Patient {
         return sexPatient;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Patient patient = (Patient) o;
+
+        return idPatient.equals(patient.idPatient);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return idPatient.hashCode();
+    }
 }
