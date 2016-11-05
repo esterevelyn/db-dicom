@@ -12,16 +12,18 @@ public class Patient {
     public String namePatient;
     public String birthDatePatient;
     public String sexPatient;
+    public double dlpTotal;
+    public double eDlpTotal;
 
 
-    @Override
+   /* @Override
     public String toString() {
         return String.format(
                 //"Customer[id=%s, idPatient='%s']",
                 // id, idPatient);
-                "Patient[Patient ID= %s,Patient’s Name= %s, Patient’s Sex= %s, Patient’s Birth Date= %s ]",
-                idPatient, namePatient, sexPatient, birthDatePatient);
-    }
+                "Patient[Patient ID= %s,Patient’s Name= %s, Patient’s Sex= %s, Patient’s Birth Date= %s, DLPtotal= %s ]",
+                idPatient, namePatient, sexPatient, birthDatePatient,dlpTotal);
+    }*/
 
 
     public void setIdPatient(String idPatient) {
@@ -54,6 +56,24 @@ public class Patient {
 
     public String getSexPatient() {
         return sexPatient;
+    }
+
+    public double getDlpTotal() {
+        return dlpTotal;
+    }
+
+    public double geteDlpTotal() {
+        return eDlpTotal;
+    }
+
+    public void seteDlpTotal(double eDlpTotal) {
+        this.eDlpTotal += eDlpTotal;
+    }
+
+    public void setDlpTotal(double dlpTotal) {
+        //System.out.println(this.dlpTotal + " + " + dlpTotal );
+        this.dlpTotal += dlpTotal;
+        //System.out.println("depois" + this.dlpTotal + " + " + dlpTotal );
     }
 
     @Override

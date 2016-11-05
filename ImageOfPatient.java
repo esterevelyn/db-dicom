@@ -17,7 +17,7 @@ public class ImageOfPatient {
 
     public void getImageOfPatient(List<String> idPatients, String date) throws InterruptedException {
 
-        String path = "C:/images"+ " " + date;
+        String path = "C:/images of     0117429I"+ " " + date;
 
         //servidor
         dcmqr.setCalledAET("CQCT", true); //remoto CQCT
@@ -64,10 +64,11 @@ public class ImageOfPatient {
             dcmqr.open();
             System.out.println("opened");
             listP = dcmqr.query();
+            System.out.println(idPatient);
             dcmqr.move(listP);
             System.out.println("queried");
 
-            System.out.println("List Size = " + listP.size());
+            //System.out.println("List Size = " + listP.size());
             System.out.println(listP);
 
             dcmqr.stop();

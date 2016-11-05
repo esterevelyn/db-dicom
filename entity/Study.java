@@ -14,18 +14,20 @@ public class Study {
     public String studyDescription;
     public String protocolName;
     public String kvp;
-    public String dlp;
+    public double dlp;
+    private String patientAge;
+    private double eDl;
     @DBRef
     Patient patient;
 
-    @Override
+    /*@Override
     public String toString() {
         return String.format(
                 //"Customer[id=%s, idPatient='%s']",
                 // id, idPatient);
                 "Image[Patient ID= %s,Study Date= %s, Study Time= %s, Study Description= %s, Protocol Name= %s, DLP= %s ]",
                 idStudy, studyDate, studyTime, studyDescription, protocolName, kvp, dlp);
-    }
+    }*/
 
     public void setIdStudy(String idStudy) {
         this.idStudy = idStudy;
@@ -51,7 +53,7 @@ public class Study {
         this.kvp = kvp;
     }
 
-    public void setDlp(String dlp) {
+    public void setDlp(double dlp) {
         this.dlp = dlp;
     }
 
@@ -79,7 +81,7 @@ public class Study {
         return kvp;
     }
 
-    public String getDlp() {
+    public double getDlp() {
         return dlp;
     }
 
@@ -89,6 +91,22 @@ public class Study {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public double geteDl() {
+        return eDl;
+    }
+
+    public void seteDl(double eDl) {
+        this.eDl=eDl;
+    }
+
+    public String getPatientAge() {
+        return patientAge;
+    }
+
+    public void setPatientAge(String patientAge) {
+        this.patientAge = patientAge;
     }
 
     @Override

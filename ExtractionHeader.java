@@ -11,7 +11,6 @@ import processor.db.StudyRepository;
 import processor.entity.Patient;
 import processor.entity.Study;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.*;
 
@@ -25,7 +24,6 @@ public class ExtractionHeader {
     @Autowired private PatientRepository repositoryP;
     @Autowired private StudyRepository repositoryS;
 
-    @PostConstruct
     public void listHeader() {
         List<DicomObject> dicomObjectList = new ArrayList<>();
         DicomObject dObjec = null;
@@ -33,7 +31,7 @@ public class ExtractionHeader {
         try {
            /* DicomInputStream dis = new DicomInputStream
                     (              new File("C:\\Users\\EsterIBm\\Documents\\Dicom\\DICOM\\S00001\\SER00001\\I00003"));*/
-            File file = new File("C:/images 20161014");
+            File file = new File("C:\\P1");
             File[] files = file.listFiles();
             files = file.listFiles();
             //lendo todos os arquivos da pasta
@@ -59,11 +57,12 @@ public class ExtractionHeader {
 
         Set<Patient> patients = new HashSet<>();
         Set<Study> studies = new HashSet<>();
-        HashMap<String, String> data = new HashMap<>();
+        Map<String, String> data = new HashMap<>();
         String key = null;
         String value = null;
-        Set<Map> mapES = new HashSet<>();
         String anterior = null;
+        double tagValueDouble;
+        double eDlp;
         for (DicomObject dObject : dicomObjectList) {
             Iterator<DicomElement> iter = dObject.datasetIterator();
             Patient patient = new Patient();
@@ -86,7 +85,7 @@ public class ExtractionHeader {
                             case "(0010,0020)":
                                 //System.out.println(tagName + " = " + tagValue);
                                 patient.setIdPatient(tagValue);
-                                key = tagValue;
+                                value = tagValue;
                                 break;
                             case "(0010,0040)":
                                 //System.out.println(tagName + " = " + tagValue);
@@ -96,6 +95,9 @@ public class ExtractionHeader {
                                 //System.out.println(tagName + " = " + tagValue);
                                 patient.setBirthDatePatient(tagValue);
                                 break;
+                            case "(0010,1010)":
+                                study.setPatientAge(tagValue);
+
                             case "(0018,1030)":
                                 //System.out.println(tagName + " = " + tagValue);
                                 study.setProtocolName(tagValue);
@@ -103,6 +105,7 @@ public class ExtractionHeader {
                             case "(0008,1030)":
                                 //System.out.println(tagName + " = " + tagValue);
                                 study.setStudyDescription(tagValue);
+
                                 break;
                             case "(0008,0020)":
                                 //System.out.println(tagName + " = " + tagValue);
@@ -119,7 +122,7 @@ public class ExtractionHeader {
                             case "(0020,000D)": //Study Instance UID
                                 //System.out.println(tagName + " = " + tagValue);
                                 study.setIdStudy(tagValue);
-                                value=tagValue;
+                                key = tagValue;
                                 /*if(anterior==null){
                                     anterior= tagValue;
                                 }
@@ -132,8 +135,16 @@ public class ExtractionHeader {
                                 break;
                             case "(00E1,1021)":
                                 //System.out.println("DLP" + " = " + tagValue);
-                                study.setDlp(tagValue);
-                                //System.out.println(study.getDlp());
+                                if (tagValue != null) {
+                                    tagValueDouble = Double.parseDouble(tagValue);
+                                    study.setDlp(tagValueDouble);
+                                }
+                                boolean ok = false;
+
+                                //ver(tagValue, patients,value,patient);
+                                // System.out.println(study.getDlp());
+                                //System.out.println(patient.getDlpTotal());
+
                             default:
                                 break;
                         }
@@ -143,62 +154,139 @@ public class ExtractionHeader {
                     e.printStackTrace();
                 }
             }
-            if (study.getDlp() != null) {
-                //if(!patients.contains(patient)) {
-                    patients.add(patient);
-                //System.out.println(patient);
-
-               // }
+            //patients.add(patient);
+            if (study.getDlp() != 0) {
+                patients.add(patient);
                 studies.add(study);
                 data.put(key, value);
-                mapES.add(data);
-
+                ///patient.setDlpTotal(study.getDlp());
+                //System.out.println(value + ":" + patient.getDlpTotal());
             }
 
 
         }
 
-       //System.out.println(data.size());
-        //System.out.println(data);
+        for (Study study : studies) {
+            for (Patient patient : patients) {
+                if (data.get(study.getIdStudy()).equals(patient.getIdPatient())) {
+                    patient.setDlpTotal(study.getDlp());
+                    //System.out.println(patient.getDlpTotal());
 
-        for(Map map: mapES){
-            System.out.println(map);
-            }
-        //System.out.println(studies.size());
-
-        /*for (Patient patient : patients) {
-            System.out.println(patient);
-        }*/
-        // salvando objeto no banco
-
-        /*for (Patient patient : patients) {
-            for (Study study : studies){
-                for(Map map: mapES){
-                    if(map.containsKey(patient.getIdPatient())== map.containsValue(study.getIdStudy())){
-                        study.setPatient(patient);
-                    }
+                    //System.out.println(patient.getIdPatient() + ":" + patient.getDlpTotal());
+                    //System.out.println(study.getPatient());
                 }
             }
-        }*/
+        }
+
+        System.out.println(data.size());
+        System.out.println(data);
+
+        //repositoryP.deleteAll();
+        //repositoryS.deleteAll();
+
+        //savePatientsDD(patients);
+
+        for (Study study : studies) {
+            for (Patient patient : patients) {
+                if (data.get(study.getIdStudy()).equals(patient.getIdPatient())) {
+                    study.setPatient(patient);
+                    patient.setDlpTotal(study.getDlp());
+                    String age = study.getPatientAge().replaceFirst("^0+(?!$)", "");
+                    age = age.substring(0, age.length() - 1);
+                    int ageInt = Integer.parseInt(age);
+                    if (study.getStudyDescription().toLowerCase().contains("ABDOME")) {
+
+                        if (study.getPatientAge().contains("Y")) {
+
+                            if (1 <= ageInt && ageInt < 5) {
+                                study.seteDl(study.getDlp() * 0.0300);
+
+                            } else if (5 <= ageInt && ageInt < 10) {
+                                study.seteDl(study.getDlp() * 0.0200);
+
+                            } else if (10 <= ageInt && ageInt < 20) {
+                                study.seteDl(study.getDlp() * 0.0150);
+
+                            } else {
+                                study.seteDl(study.getDlp() * 0.0150);
+
+                            }
+                        } else if (study.getPatientAge().contains("M")) {
+                            study.seteDl(study.getDlp() * 0.0490);
+
+                        }
+
+                    } else if (study.getStudyDescription().toUpperCase().contains("TORAX")) {
+                        if (study.getPatientAge().contains("Y")) {
+
+                            if (1 <= ageInt && ageInt < 5) {
+                                study.seteDl(study.getDlp() * 0.0260);
+
+                            } else if (5 <= ageInt && ageInt < 10) {
+                                study.seteDl(study.getDlp() * 0.0180);
+
+                            } else if (10 <= ageInt && ageInt < 20) {
+                                study.seteDl(study.getDlp() * 0.0130);
+
+                            } else {
+                                study.seteDl(study.getDlp() * 0.0140);
+
+                            }
+                        } else if (study.getPatientAge().contains("M")) {
+                            study.seteDl(study.getDlp() * 0.0390);
+
+                        } else if (study.getStudyDescription().toUpperCase().contains("CRANIO")) {
+                            if (study.getPatientAge().contains("Y")) {
+
+                                if (1 <= ageInt && ageInt < 5) {
+                                    study.seteDl(study.getDlp() * 0.0067);
+
+                                } else if (5 <= ageInt && ageInt < 10) {
+                                    study.seteDl(study.getDlp() * 0.0040);
+
+                                } else if (10 <= ageInt && ageInt < 20) {
+                                    study.seteDl(study.getDlp() * 0.0032);
+
+                                } else {
+                                    study.seteDl(study.getDlp() * 0.0021);
+
+                                }
+                            } else if (study.getPatientAge().contains("M")) {
+                                study.seteDl(study.getDlp() * 0.0110);
+
+                            }
+
+                        }
+
+                        //System.out.println(patient.getIdPatient() + ":" + patient.getDlpTotal());
+                        //System.out.println(study.getPatient());
+                    }
+                    System.out.println(study.geteDl());
+                    patient.seteDlpTotal(study.geteDl());
+                    System.out.println(patient.geteDlpTotal());
+
+                }
+            }
+
+            // saveStudiesDD(studies);
+
+            //repositoryS.
+
+            //repositoryS.findByPacient(patient);
+
+        }
     }
-    //verify(studies);
 
 
-    //repositoryP.deleteAll();
-    //repositoryS.deleteAll();
-
-    private void savePatientsDD(List<Patient> patients) {
+    private void savePatientsDD(Set<Patient> patients) {
 
         for (Patient patient : patients) {
             repositoryP.save(patient);
         }
 
-
-
-
     }
 
-    private void saveStudiesDD(List<Study> studies) {
+    private void saveStudiesDD(Set<Study> studies) {
 
         for (Study study : studies) {
             repositoryS.save(study);
@@ -232,6 +320,25 @@ public class ExtractionHeader {
             // if (s.getDlp().equals(null)) {
             studies.remove(s);
             //}
+        }
+
+    }
+
+    private void ver(String tagValue, Set<Patient>patients,String value, Patient patient){
+        boolean ok=false;
+        double tagValueDouble;
+        for(Patient p:patients) {
+            if (p.getIdPatient().equals(value)) {
+                tagValueDouble = Double.parseDouble(tagValue);
+                p.setDlpTotal(tagValueDouble);
+                System.out.println(p.getIdPatient());
+                ok=true;
+            }
+        }
+        if(!ok){
+            tagValueDouble = Double.parseDouble(tagValue);
+            patient.setDlpTotal(tagValueDouble);
+
         }
 
     }

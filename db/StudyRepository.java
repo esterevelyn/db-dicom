@@ -8,4 +8,6 @@ import processor.entity.Study;
  */
 public interface StudyRepository extends MongoRepository<Study, String> {
     public Study findByIdStudy(String idStudy);
+   // public Study findByPacient(Patient pacient);
+
 }

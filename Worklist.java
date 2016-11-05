@@ -44,7 +44,6 @@ public class Worklist {
         //wl.addMatchingKey(new int[]{Tag.StudyDate}, "20161012");
         //wl.addMatchingKey(new int[]{Tag.ScheduledProcedureStepStartDate}, "20161014");
         //wl.addReturnKey(new int[]{Tag.CTAcquisitionTypeSequence});
-        //wl.;
 
 
         try{
@@ -84,7 +83,8 @@ public class Worklist {
     }
 
     private List<String> getOnlyIDPatient(List listP, List<String> idPatients){
-
+        System.out.println(listP.size());
+        System.out.println(idPatients.size());
         for(int i=0; i<listP.size(); i++) {
             String regImg = listP.get(i).toString();
             String[] inf;
@@ -104,14 +104,14 @@ public class Worklist {
         //for (Object object : listP) {
         // idPatients.add(Objects.toString(object, null));
         // }
-
+        System.out.println(idPatients);
         return idPatients;
 
     }
 
     private void salveTXT (List<String> idPatients) throws IOException {
 
-        FileWriter arq = new FileWriter("C:\\Users\\EsterIBm\\Documents\\ID Patient HOJE.txt");
+        FileWriter arq = new FileWriter("C:\\Users\\EsterIBm\\Documents\\ID Patient " + date + ".txt");
         PrintWriter gravarArq = new PrintWriter(arq);
 
         for (String object : idPatients) {
